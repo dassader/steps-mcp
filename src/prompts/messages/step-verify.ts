@@ -1,0 +1,5 @@
+export function stepVerifyMessage(args: Record<string, string>): string {
+  return `Verify step ${args.stepId} using Steps MCP.
+
+Read steps://steps/${args.stepId} and steps://steps/${args.stepId}/history. Compare the actual result with the step description, expected result, constraints, and notes. Run the strongest relevant checks available, such as tests, build, typecheck, lint, manual inspection, or user-visible behavior checks. Capture evidence in the transition note. If verification passes and every required acceptance criterion was actually satisfied, call step.transition from verification to done. If verification fails but can be fixed, call step.transition from verification to implementing with a note that explains the failure and next fix. If verification cannot continue or a required criterion would violate user instructions, missing access, external systems, safety constraints, or unapproved deployment/destructive work, transition to blocked. Always use step.transition for status changes. Optional deeper docs: steps://docs/flows/verification, steps://docs/flows/status, and steps://docs/flows/blocking.`;
+}

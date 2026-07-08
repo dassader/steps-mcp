@@ -1,0 +1,14 @@
+*.idea
+*.iml
+.idea
+node_modules/
+dist/
+data/
+.env
+*.db
+*.db-shm
+*.db-wal
+*.sqlite
+*.sqlite-shm
+*.sqlite-wal
+npm-debug.log*

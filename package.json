@@ -1,0 +1,74 @@
+{
+  "name": "steps-mcp",
+  "version": "1.0.0",
+  "mcpName": "io.github.local/steps-mcp",
+  "description": "Steps MCP server.",
+  "type": "module",
+  "private": true,
+  "main": "dist/index.js",
+  "files": [
+    "dist/**/*",
+    "migrations/**/*"
+  ],
+  "scripts": {
+    "clean": "node -e \"require('node:fs').rmSync('dist', { recursive: true, force: true })\"",
+    "prebuild": "npm run clean",
+    "dev": "tsx watch src/index.ts",
+    "start": "node dist/index.js",
+    "build": "npm run build:server && npm run build:ui",
+    "build:server": "tsc -p tsconfig.json",
+    "build:ui": "vite build",
+    "typecheck": "npm run typecheck:server && npm run typecheck:ui",
+    "typecheck:server": "tsc -p tsconfig.json --noEmit",
+    "typecheck:ui": "tsc -p tsconfig.ui.json --noEmit",
+    "db:migrate": "tsx src/scripts/db.ts up",
+    "db:migrate:status": "tsx src/scripts/db.ts status",
+    "docker:build": "docker build -t steps-mcp:local .",
+    "docker:up": "docker compose up -d --build",
+    "docker:down": "docker compose down",
+    "docker:logs": "docker compose logs -f steps-mcp",
+    "inspect": "npx @modelcontextprotocol/inspector http://127.0.0.1:3001/mcp",
+    "test": "vitest run",
+    "test:watch": "vitest"
+  },
+  "keywords": [
+    "mcp",
+    "model-context-protocol",
+    "steps",
+    "task-planning",
+    "ai-tools"
+  ],
+  "author": "",
+  "license": "ISC",
+  "engines": {
+    "node": ">=20.0.0"
+  },
+  "dependencies": {
+    "@modelcontextprotocol/sdk": "^1.29.0",
+    "ajv": "^8.20.0",
+    "ajv-formats": "^3.0.1",
+    "better-sqlite3": "^12.11.1",
+    "cors": "^2.8.6",
+    "dotenv": "^17.4.2",
+    "express": "^5.2.1",
+    "lucide-react": "^1.23.0",
+    "react": "^19.2.7",
+    "react-dom": "^19.2.7",
+    "zod": "^4.4.3"
+  },
+  "devDependencies": {
+    "@types/better-sqlite3": "^7.6.13",
+    "@types/cors": "^2.8.19",
+    "@types/express": "^5.0.6",
+    "@types/node": "^26.1.0",
+    "@types/react": "^19.2.17",
+    "@types/react-dom": "^19.2.3",
+    "@types/supertest": "^7.2.0",
+    "@vitejs/plugin-react": "^4.7.0",
+    "supertest": "^7.2.2",
+    "tsx": "^4.23.0",
+    "typescript": "^6.0.3",
+    "vite": "^6.4.3",
+    "vitest": "^3.2.6"
+  }
+}
