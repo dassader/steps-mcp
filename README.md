@@ -2,6 +2,10 @@
 
 Steps MCP is an agent-friendly task planning and execution MCP server with durable SQLite storage and a browser UI for reviewing plans and following progress.
 
+![Steps MCP workflow board](assets/steps-board.jpg)
+
+The board makes the execution state visible at a glance while the MCP surface gives agents compact tools, durable resources, and an explicit next safe action.
+
 ## Run with Docker
 
 ```bash
@@ -34,6 +38,31 @@ Steps MCP keeps planning, review, execution, verification, and blockers explicit
 5. Move completed implementation through verification, or record an honest blocker.
 
 Tool responses include the current state, relevant identifiers, and the next safe action so an agent does not need the entire state machine in tool descriptions.
+
+![Explicit plan approval before execution](assets/plan-approval.jpg)
+
+## Durable work evidence
+
+Every status transition creates an audit note. Agents can also add standalone notes and attach text, binary evidence, or links without changing step status.
+
+![Step description, notes, attachment, and status history](assets/step-evidence.jpg)
+
+## Demo and examples
+
+The repository includes a runnable MCP client that creates the workflow shown above:
+
+```bash
+npm run build
+DB_PATH=./data/demo.db npm start
+```
+
+In another terminal:
+
+```bash
+npm run demo:seed
+```
+
+See [examples](examples/README.md) for the demo setup and representative `plan.create_with_steps`, `plan.approve`, and `step.transition` calls.
 
 ## Run with Compose
 
