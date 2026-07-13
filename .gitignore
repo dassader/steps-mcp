@@ -5,6 +5,7 @@ node_modules/
 dist/
 data/
 .env
+AGENTS.md
 *.db
 *.db-shm
 *.db-wal

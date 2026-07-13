@@ -5,12 +5,12 @@ import type { ToolRegistration } from "./types.js";
 export const planListTool: ToolRegistration = {
   name: "plan.list",
   title: "List Plans",
-  description: "List recent accessible plans with optional status, title, and active-step filtering.",
+  description: "List recent accessible plans with optional status, title/id, and active-step filtering.",
   inputSchema: objectSchema([], {
     status: planStatusSchema,
     query: {
       type: "string",
-      description: "Optional case-insensitive substring match on plan title."
+      description: "Optional case-insensitive substring match on plan title, or exact plan UUID."
     },
     hasActiveStep: {
       type: "boolean",

@@ -1,4 +1,5 @@
 import { planCreateWithStepsHandler } from "../plan-create-with-steps.js";
+import { stepDescriptionFormatInstruction } from "../../domain/step-description-format.js";
 import { objectSchema, orderFieldSchema, stringFieldSchema } from "./schema.js";
 import type { JsonSchema } from "./schema.js";
 import type { ToolRegistration } from "./types.js";
@@ -8,9 +9,7 @@ const newStepInput: JsonSchema = {
   required: ["title", "description", "order"],
   properties: {
     title: stringFieldSchema("Short step title."),
-    description: stringFieldSchema(
-      "Detailed markdown instructions explaining what to do, why, expected result, important constraints, and how to verify the result."
-    ),
+    description: stringFieldSchema(stepDescriptionFormatInstruction),
     order: orderFieldSchema
   },
   additionalProperties: false
@@ -19,13 +18,13 @@ const newStepInput: JsonSchema = {
 export const planCreateWithStepsTool: ToolRegistration = {
   name: "plan.create_with_steps",
   title: "Create Plan With Steps",
-  description: "Create a work plan with detailed markdown todo steps and return resource URIs and review URL.",
+  description: "Create a work plan with detailed formatted todo steps and return resource URIs and review URL.",
   inputSchema: objectSchema(["title", "steps"], {
     title: stringFieldSchema("Short title for the work plan."),
     steps: {
       type: "array",
       minItems: 1,
-      description: "Initial detailed markdown todo steps for the plan.",
+      description: "Initial todo steps; each description must follow the required Step markdown format.",
       items: newStepInput
     }
   }),

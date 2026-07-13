@@ -621,6 +621,8 @@ export async function runScenario(id: ScenarioId): Promise<void> {
         expect(approved.state.plans.every((plan: Record<string, string>) => plan.status === "approved")).toBe(true);
         const queried = expectToolSuccess(await context.client.callTool("plan.list", { query: "Alpha" }));
         expect(queried.state.plans.map((plan: Record<string, string>) => plan.id)).toContain(alpha.planId);
+        const queriedById = expectToolSuccess(await context.client.callTool("plan.list", { query: alpha.planId }));
+        expect(queriedById.state.plans.map((plan: Record<string, string>) => plan.id)).toEqual([alpha.planId]);
         const active = expectToolSuccess(await context.client.callTool("plan.list", { hasActiveStep: true }));
         expect(active.state.plans.map((plan: Record<string, string>) => plan.id)).toContain(gamma.planId);
         const firstPage = expectToolSuccess(await context.client.callTool("plan.list", { limit: 2 }));

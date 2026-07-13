@@ -1,3 +1,5 @@
+import { stepDescriptionFormatInstruction } from "../domain/step-description-format.js";
+
 export interface StaticResourceDefinition {
   uri: string;
   name: string;
@@ -78,7 +80,11 @@ export const documentationResources: StaticResourceDefinition[] = [
     title: "Planning Flow",
     description: "Explains how agents create reviewable plans.",
     mimeType: "text/markdown",
-    text: "# Planning Flow\n\nWhen the user asks to use Steps MCP, create a detailed markdown plan and steps. Return the review URL and stop until the user approves execution."
+    text: `# Planning Flow
+
+When the user asks to use Steps MCP, create a detailed markdown plan and steps. Step descriptions must follow the shared format below. Return the review URL and stop until the user approves execution.
+
+${stepDescriptionFormatInstruction}`
   },
   {
     uri: "steps://docs/flows/review",

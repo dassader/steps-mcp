@@ -1,6 +1,5 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
-import { PlanBoardPage } from "./pages/PlanBoardPage";
 import { PlansPage } from "./pages/PlansPage";
 
 function getPlanIdFromPath(): string | undefined {
@@ -9,7 +8,24 @@ function getPlanIdFromPath(): string | undefined {
 }
 
 export function App() {
-  const [focusedPlanId] = useState<string | undefined>(() => getPlanIdFromPath());
+  const [routePlanId, setRoutePlanId] = useState<string | undefined>(() => getPlanIdFromPath());
 
-  return focusedPlanId ? <PlanBoardPage planId={focusedPlanId} /> : <PlansPage />;
+  useEffect(() => {
+    function handlePopState(): void {
+      setRoutePlanId(getPlanIdFromPath());
+    }
+
+    window.addEventListener("popstate", handlePopState);
+    return () => window.removeEventListener("popstate", handlePopState);
+  }, []);
+
+  function handleSelectedPlanChange(planId: string | undefined): void {
+    const nextPath = planId ? `/plans/${encodeURIComponent(planId)}` : "/";
+    if (window.location.pathname !== nextPath) {
+      window.history.pushState(null, "", nextPath);
+    }
+    setRoutePlanId(planId);
+  }
+
+  return <PlansPage initialSelectedPlanId={routePlanId} onSelectedPlanChange={handleSelectedPlanChange} />;
 }

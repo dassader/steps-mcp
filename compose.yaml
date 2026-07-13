@@ -1,0 +1,21 @@
+name: steps-mcp
+
+services:
+  steps-mcp:
+    image: ghcr.io/dassader/steps-mcp:latest
+    ports:
+      - "${STEPS_MCP_PORT:-3001}:3001"
+    environment:
+      HOST: 0.0.0.0
+      PORT: 3001
+      PUBLIC_URL: "http://localhost:${STEPS_MCP_PORT:-3001}"
+      MCP_ENDPOINT: /mcp
+      MCP_STATEFUL: "true"
+      MCP_JSON_RESPONSE: "false"
+      DB_PATH: /app/data/steps.db
+    volumes:
+      - steps-mcp-data:/app/data
+    restart: unless-stopped
+
+volumes:
+  steps-mcp-data:

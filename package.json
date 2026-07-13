@@ -1,8 +1,8 @@
 {
   "name": "steps-mcp",
   "version": "1.0.0",
-  "mcpName": "io.github.local/steps-mcp",
-  "description": "Steps MCP server.",
+  "mcpName": "io.github.dassader/steps-mcp",
+  "description": "Agent-friendly task planning and execution MCP server with a browser UI.",
   "type": "module",
   "private": true,
   "main": "dist/index.js",
@@ -38,8 +38,16 @@
     "task-planning",
     "ai-tools"
   ],
-  "author": "",
+  "author": "Andrii Kulikov",
   "license": "ISC",
+  "homepage": "https://github.com/dassader/steps-mcp#readme",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/dassader/steps-mcp.git"
+  },
+  "bugs": {
+    "url": "https://github.com/dassader/steps-mcp/issues"
+  },
   "engines": {
     "node": ">=20.0.0"
   },

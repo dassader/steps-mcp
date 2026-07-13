@@ -24,11 +24,12 @@ FROM deps AS production-deps
 RUN npm ci --omit=dev && npm cache clean --force
 
 FROM base AS runtime
-ARG OCI_SOURCE="https://github.com/local/steps-mcp"
+ARG OCI_SOURCE="https://github.com/dassader/steps-mcp"
 LABEL org.opencontainers.image.title="Steps MCP"
-LABEL org.opencontainers.image.description="Steps MCP server with Streamable HTTP MCP endpoint and browser UI"
+LABEL org.opencontainers.image.description="Agent-friendly task planning and execution MCP server with browser UI"
 LABEL org.opencontainers.image.source=$OCI_SOURCE
-LABEL io.modelcontextprotocol.server.name="io.github.local/steps-mcp"
+LABEL org.opencontainers.image.licenses="ISC"
+LABEL io.modelcontextprotocol.server.name="io.github.dassader/steps-mcp"
 
 ENV NODE_ENV=production
 ENV HOST=0.0.0.0

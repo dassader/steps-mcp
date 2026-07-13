@@ -170,8 +170,9 @@ export function listPlans(db: SqliteDatabase, filters: PlanListFilters = {}): Pl
     values.push(filters.status);
   }
   if (filters.query?.trim()) {
-    where.push("lower(p.title) LIKE ?");
-    values.push(`%${filters.query.toLowerCase()}%`);
+    const normalizedQuery = filters.query.trim().toLowerCase();
+    where.push("(lower(p.title) LIKE ? OR lower(p.id) = ?)");
+    values.push(`%${normalizedQuery}%`, normalizedQuery);
   }
   if (filters.hasActiveStep !== undefined) {
     where.push(`

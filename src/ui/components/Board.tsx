@@ -8,7 +8,6 @@ import { BoardColumn } from "./BoardColumn";
 interface BoardProps {
   activeDragStatus: StepStatus | null;
   apiError: string | null;
-  isFocusedPlanRoute: boolean;
   isLoading: boolean;
   label: string;
   onDrop: (event: DragEvent<HTMLElement>, status: StepStatus) => void;
@@ -21,7 +20,6 @@ interface BoardProps {
 export function Board({
   activeDragStatus,
   apiError,
-  isFocusedPlanRoute: _isFocusedPlanRoute,
   isLoading,
   label,
   onDrop,

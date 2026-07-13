@@ -48,4 +48,47 @@ describe("tools/list discovery contract", () => {
       context.close();
     }
   });
+
+  it("publishes the required Step description format in creation schemas", async () => {
+    const context = await createMcpContractContext();
+    try {
+      const result = expectJsonRpcSuccess(await context.client.listTools());
+      const tools = result.tools as Array<Record<string, unknown>>;
+      const stepCreate = requireTool(tools, "step.create");
+      const planCreateWithSteps = requireTool(tools, "plan.create_with_steps");
+      const stepDescription = propertyDescription(stepCreate.inputSchema, ["description"]);
+      const nestedStepDescription = propertyDescription(planCreateWithSteps.inputSchema, ["steps", "items", "description"]);
+
+      expect(stepDescription).toContain("Keep headings, subheadings, checklist markers, and user-story labels in English.");
+      expect(stepDescription).toContain("Write the filled-in content in the language used with the user.");
+      expect(stepDescription).toContain("## Summary");
+      expect(stepDescription).toContain("## Acceptance criteria");
+      expect(stepDescription).toContain("### Cleanup / Finalization");
+      expect(nestedStepDescription).toBe(stepDescription);
+    } finally {
+      context.close();
+    }
+  });
 });
+
+function requireTool(tools: Array<Record<string, unknown>>, name: string): Record<string, unknown> {
+  const tool = tools.find((candidate) => candidate.name === name);
+  expect(tool).toBeDefined();
+  return tool as Record<string, unknown>;
+}
+
+function propertyDescription(schema: unknown, path: string[]): string {
+  let current = schema as Record<string, unknown>;
+
+  for (const segment of path) {
+    if (segment === "items") {
+      current = current.items as Record<string, unknown>;
+      continue;
+    }
+
+    const properties = current.properties as Record<string, unknown>;
+    current = properties[segment] as Record<string, unknown>;
+  }
+
+  return String(current.description);
+}

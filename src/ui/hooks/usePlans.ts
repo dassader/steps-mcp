@@ -43,6 +43,11 @@ export function usePlans({ enabled, initialSelectedPlanId }: UsePlansOptions) {
   }
 
   useEffect(() => {
+    setSelectedPlanId(initialSelectedPlanId);
+    setApiError(null);
+  }, [initialSelectedPlanId]);
+
+  useEffect(() => {
     if (!enabled) {
       setIsLoading(false);
       return;

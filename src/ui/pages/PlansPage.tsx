@@ -20,6 +20,11 @@ import { isStepTransitionAllowed, unavailableTransitionMessage } from "../utils/
 
 const TOAST_DURATION_MS = 4200;
 
+interface PlansPageProps {
+  initialSelectedPlanId?: string;
+  onSelectedPlanChange?: (planId: string | undefined) => void;
+}
+
 async function writeTextToClipboard(text: string): Promise<void> {
   if (copyTextWithCopyEvent(text) || copyTextWithTextArea(text)) {
     return;
@@ -73,7 +78,7 @@ function copyTextWithTextArea(text: string): boolean {
   }
 }
 
-export function PlansPage() {
+export function PlansPage({ initialSelectedPlanId, onSelectedPlanChange }: PlansPageProps) {
   const {
     apiError: plansError,
     createNewPlan,
@@ -84,7 +89,8 @@ export function PlansPage() {
     selectedPlanId,
     visiblePlans
   } = usePlans({
-    enabled: true
+    enabled: true,
+    initialSelectedPlanId
   });
 
   const boardPlanId = selectedPlanId;
@@ -153,11 +159,17 @@ export function PlansPage() {
     try {
       setCreatePlanError(null);
       setBoardApiError(null);
-      await createNewPlan(title);
+      const created = await createNewPlan(title);
+      onSelectedPlanChange?.(created.id);
       closeCreatePlan();
     } catch (error) {
       setCreatePlanError(error instanceof Error ? error.message : "Failed to create plan.");
     }
+  }
+
+  function selectPlanAndUpdateUrl(planId: string): void {
+    selectPlan(planId);
+    onSelectedPlanChange?.(planId);
   }
 
   async function copyPlanIdToClipboard(planId: string): Promise<void> {
@@ -318,7 +330,7 @@ export function PlansPage() {
       <PlanRail
         onCopyPlanId={copyPlanIdToClipboard}
         onCreatePlan={openCreatePlan}
-        onSelectPlan={selectPlan}
+        onSelectPlan={selectPlanAndUpdateUrl}
         plans={visiblePlans}
         selectedPlanId={selectedPlanId}
       />
@@ -328,7 +340,6 @@ export function PlansPage() {
           <Board
             activeDragStatus={draggedStep?.status ?? null}
             apiError={apiError}
-            isFocusedPlanRoute={false}
             isLoading={isLoading}
             label={boardLabel}
             onDrop={handleDrop}
