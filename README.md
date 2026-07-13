@@ -19,6 +19,8 @@ docker run -d \
 
 The `/app/data` volume stores plans, steps, notes, transitions, attachments, and workflow state.
 
+The `latest` image is published for `linux/amd64` and `linux/arm64`, so Docker selects the correct platform automatically.
+
 After the container starts:
 
 - MCP endpoint: `http://localhost:3001/mcp`
@@ -46,37 +48,6 @@ Tool responses include the current state, relevant identifiers, and the next saf
 Every status transition creates an audit note. Agents can also add standalone notes and attach text, binary evidence, or links without changing step status.
 
 ![Step description, notes, attachment, and status history](assets/step-evidence.jpg)
-
-## Demo and examples
-
-The repository includes a runnable MCP client that creates the workflow shown above:
-
-```bash
-npm run build
-DB_PATH=./data/demo.db npm start
-```
-
-In another terminal:
-
-```bash
-npm run demo:seed
-```
-
-See [examples](examples/README.md) for the demo setup and representative `plan.create_with_steps`, `plan.approve`, and `step.transition` calls.
-
-## Run with Compose
-
-```bash
-docker compose up -d
-```
-
-The `latest` image is published for `linux/amd64` and `linux/arm64`, so Docker selects the correct platform automatically.
-
-To expose a different host port:
-
-```bash
-STEPS_MCP_PORT=8799 docker compose up -d
-```
 
 ## Configuration
 
