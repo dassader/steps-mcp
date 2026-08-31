@@ -1,0 +1,40 @@
+services:
+  steps-mcp:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: steps-mcp:local
+    container_name: steps-mcp
+    restart: unless-stopped
+    ports:
+      # Host port can be overridden via STEPS_MCP_PORT (see .env.example). Container always listens on 3001.
+      - "${STEPS_MCP_PORT:-3001}:3001"
+    environment:
+      HOST: "0.0.0.0"
+      PORT: "3001"
+      # Reachable base URL used in the browser review links returned by the server.
+      PUBLIC_URL: "http://localhost:${STEPS_MCP_PORT:-3001}"
+      MCP_ENDPOINT: "/mcp"
+      MCP_STATEFUL: "true"
+      MCP_JSON_RESPONSE: "false"
+      DB_PATH: "/app/data/steps.db"
+      # Comma-separated extra browser origins allowed to reach the server (optional).
+      ALLOWED_ORIGINS: "${ALLOWED_ORIGINS:-}"
+    volumes:
+      # Named volume keeps plans, steps, notes, transitions, attachments, and workflow state.
+      - steps-mcp-data:/app/data
+    healthcheck:
+      test:
+        [
+          "CMD",
+          "node",
+          "-e",
+          "fetch('http://127.0.0.1:3001/health').then(r=>process.exit(r.ok?0:1)).catch(()=>process.exit(1))",
+        ]
+      interval: 30s
+      timeout: 5s
+      start_period: 10s
+      retries: 3
+
+volumes:
+  steps-mcp-data:
